@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-public class PathfindingTester : MonoBehaviour
+public class PART1TruckPathFinder : MonoBehaviour
 {
     // The A* manager.
     private AStarManager AStarManager = new AStarManager(); 
@@ -17,6 +17,20 @@ public class PathfindingTester : MonoBehaviour
     private GameObject start;
     [SerializeField]
     private List<GameObject> end;
+    [SerializeField]
+    private GameObject HumanAgent = null;
+    [SerializeField]
+    private GameObject HumanAgent1 = null;
+    [SerializeField]
+    private GameObject HumanAgent2 = null;
+    [SerializeField]
+    private GameObject StaticObstacle = null;
+    // Time Taken
+    private float timer = 0;
+    // Distance Covered 
+    private float totalDistance = 0;
+    private Vector3 lastPosition = new Vector3(0,0,0);
+    private bool outputTimeAndDistance = true;
     // Debug line offset.
     Vector3 OffSet = new Vector3(0, 0.3f, 0);
     // Movement variables.
@@ -58,7 +72,7 @@ public class PathfindingTester : MonoBehaviour
             if (tmpWaypointMan)
             {
                 Waypoints.Add(waypoint);
-                Debug.Log("Waypoints Count: " + Waypoints.Count.ToString());
+                //Debug.Log("Waypoints Count: " + Waypoints.Count.ToString());
             }
         }
         // Go through the waypoints and create connections.
@@ -74,7 +88,7 @@ public class PathfindingTester : MonoBehaviour
                     aConnection.FromNode = waypoint;
                     aConnection.ToNode = aVisGraphConnection.ToNode;
                     AStarManager.AddConnection(aConnection);
-                    Debug.Log("Added Connection" + aConnection.ToNode.ToString());
+                    //Debug.Log("Added Connection" + aConnection.ToNode.ToString());
                 }
                 else
                 {
@@ -91,7 +105,7 @@ public class PathfindingTester : MonoBehaviour
                 Debug.Log("Warning, A* did not return a path between the start and end node.");
                 
             }
-        
+        lastPosition = transform.position;
       
         
        
@@ -112,7 +126,7 @@ public class PathfindingTester : MonoBehaviour
     {
         if(goBack)
         {
-            Debug.Log("I am Going Back!");
+            //Debug.Log("I am Going Back!");
             ConnectionArray = AStarManager.PathfindAStar(start, end[currentEnd]);
             if (ConnectionArray.Count == 0)
             {
@@ -124,6 +138,47 @@ public class PathfindingTester : MonoBehaviour
         }
         if (agentMove && goBack == false && stop == false)
         {
+            Vector3 tmpDir = lastPosition - transform.position;
+            float tempDistance = tmpDir.magnitude;
+            totalDistance += tempDistance;
+            lastPosition = transform.position;
+            timer += Time.deltaTime;
+            if(HumanAgent)
+            {
+                float DistanceToObject = Vector3.Distance(transform.position, HumanAgent.transform.position);
+                if (DistanceToObject < 6)
+                {
+                    return;
+                }
+            }
+            if (HumanAgent1)
+            {
+                float DistanceToObject = Vector3.Distance(transform.position, HumanAgent1.transform.position);
+                if (DistanceToObject < 7)
+                {
+                    return;
+                }
+            }
+            if (HumanAgent2)
+            {
+                float DistanceToObject = Vector3.Distance(transform.position, HumanAgent2.transform.position);
+                if (DistanceToObject < 8)
+                {
+                    return;
+                }
+            }
+            if(StaticObstacle)
+            {
+                float DistanceToObject = Vector3.Distance(transform.position, StaticObstacle.transform.position);
+                if (DistanceToObject < 50)
+                {
+                    currentSpeed = 10;
+                }
+                else
+                {
+                    currentSpeed = 30;
+                }
+            }
             // Determine the direction to first node in the array.
             if (moveDirection > 0)
             {
@@ -176,10 +231,11 @@ public class PathfindingTester : MonoBehaviour
                 {
                     if(endCurrentTrip == false)
                     {
+                        Debug.Log("Made the delivery");
                         int sleepTime = 3000;
-                        Debug.Log("Making the delivery");
+                        
                         Thread.Sleep(sleepTime);
-                        Debug.Log("Going Back!");
+                        //Debug.Log("Going Back!");
                         var temp = start;
                         start = end[currentEnd];
                         end[currentEnd] = temp;
@@ -196,6 +252,7 @@ public class PathfindingTester : MonoBehaviour
                     {
                         Debug.Log("Current Trip Ended!");
                         stop = true;
+                        agentMove = false;
                         return;
                     }
                    
@@ -211,6 +268,14 @@ public class PathfindingTester : MonoBehaviour
         }
         else
         {
+            if(outputTimeAndDistance)
+            {
+                Debug.Log("Time Taken: " + timer);
+                Debug.Log("Distance: " + totalDistance);
+                timer = 0;
+                totalDistance = 0;
+                outputTimeAndDistance = false;
+            }
         }
     }
 }

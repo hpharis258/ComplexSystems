@@ -30,7 +30,7 @@ public class AStar
             // If it is the goal node, then terminate.
             if (CurrentRecord.Node.Equals(end))
             {
-                Debug.Log("Current NODE IS END");
+                //Debug.Log("Current NODE IS END");
                 break;
             }
             // Otherwise get its outgoing connections.
