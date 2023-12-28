@@ -77,7 +77,7 @@ public class PART2TruckPathFinder : MonoBehaviour
     public void WaitForFasterAgentToPass()
     {
         //Debug.Log("THREAD STARTED");
-        Thread.Sleep(2000);
+        Thread.Sleep(3000);
         run = true;
         //Debug.Log("THREAD END");
     }
@@ -263,7 +263,7 @@ public class PART2TruckPathFinder : MonoBehaviour
                             //transform.Translate(Vector3.forward * Time.deltaTime);
                             //transform.Translate(Vector3.forward);
                             float OtherAgentSpeed = AnotherAgentScript.GetSpeed();
-                            if (OtherAgentSpeed >= currentSpeed)
+                            if (OtherAgentSpeed > currentSpeed)
                             {
                                 Thread t = new Thread(new ThreadStart(WaitForFasterAgentToPass));
                                 t.Start();
@@ -289,7 +289,7 @@ public class PART2TruckPathFinder : MonoBehaviour
                             //transform.Translate(Vector3.forward * Time.deltaTime);
                             // transform.Translate(Vector3.forward);
                             float OtherAgentSpeed = AnotherAgentScript1.GetSpeed();
-                            if (OtherAgentSpeed >= currentSpeed)
+                            if (OtherAgentSpeed > currentSpeed)
                             {
                                 Thread t = new Thread(new ThreadStart(WaitForFasterAgentToPass));
                                 t.Start();
@@ -314,7 +314,7 @@ public class PART2TruckPathFinder : MonoBehaviour
                             ////transform.Translate(Vector3.forward * Time.deltaTime);
                             ////transform.Translate(Vector3.forward);
                             float OtherAgentSpeed = AnotherAgentScript2.GetSpeed();
-                            if (OtherAgentSpeed >= currentSpeed)
+                            if (OtherAgentSpeed > currentSpeed)
                             {
                                 Thread t = new Thread(new ThreadStart(WaitForFasterAgentToPass));
                                 t.Start();
@@ -341,7 +341,7 @@ public class PART2TruckPathFinder : MonoBehaviour
                             //transform.Translate(Vector3.forward * Time.deltaTime);
                             //transform.Translate(Vector3.forward);
                             float OtherAgentSpeed = AnotherAgentScript3.GetSpeed();
-                            if (OtherAgentSpeed >= currentSpeed)
+                            if (OtherAgentSpeed > currentSpeed)
                             {
                                 Thread t = new Thread(new ThreadStart(WaitForFasterAgentToPass));
                                 t.Start();
@@ -364,7 +364,7 @@ public class PART2TruckPathFinder : MonoBehaviour
                             //transform.Translate(Vector3.forward * Time.deltaTime);
                             //transform.Translate(Vector3.forward);
                             float OtherAgentSpeed = AnotherAgentScript4.GetSpeed();
-                            if (OtherAgentSpeed >= currentSpeed)
+                            if (OtherAgentSpeed > currentSpeed)
                             {
                                 Thread t = new Thread(new ThreadStart(WaitForFasterAgentToPass));
                                 t.Start();
